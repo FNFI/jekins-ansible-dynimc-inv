@@ -9,7 +9,7 @@ regions:
   - us-west-1
 
 filters:
-  instance-state-name : running
+  instance-state-name : all
  
 keyed_groups:
   - key: tags.Name
