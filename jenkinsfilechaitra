@@ -1,0 +1,38 @@
+pipeline {
+agent { 
+label 'JenkinsAnsibleNode'
+}
+  
+environment {
+AWS_EC2_PRIVATE_KEY=credentials('ec2-private-key') 
+}
+  
+stages {
+    
+//Get the Code from GitHub Repo
+stage('CheckOutCode'){
+steps{
+git credentialsId: '4f94fc02-3822-4f6b-b20c-f8ec47f201b7', url: 'https://github.com/FNFI/jekins-ansible-dynimc-inv.git'
+}
+}
+ 
+//Using Terrafrom can create the Servers
+    
+    stage('CreateServers'){
+      steps{
+       sh "terraform  -chdir=terraformscripts init"
+       sh "terraform  -chdir=terraformscripts apply --auto-approve"
+      }
+    }
+    
+//Run the playbook
+stage('RunPlaybook') {
+steps {
+//display list of dynamic inventory
+sh "ansible-inventory --graph -i inventory/aws_ec2.yml"
+sh "ansible-playbook -i inventory/aws_ec2.yml --private-key='$AWS_EC2_PRIVATE_KEY' playbooks/installTomcat.yml -l HostMachine5 --ssh-common-args='-o StrictHostKeyChecking=no'"
+}
+}
+  
+}//stages closing
+}//pipeline closing
