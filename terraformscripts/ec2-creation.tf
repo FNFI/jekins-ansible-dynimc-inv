@@ -10,7 +10,7 @@ resource "aws_instance" "AWSEC2Instance"{
      security_groups = ["launch-wizard-2"]
      key_name        = "chaitradevopswithaws"
      tags = {
-        Name = "HostMachine4"
+        Name = "HostMachine5"
      }
 }
 
