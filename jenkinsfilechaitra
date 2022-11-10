@@ -1,3 +1,4 @@
+#jenkins file to implement integrating jenkins, ansible with terraform dynamic inventory
 pipeline {
 agent { 
 label 'JenkinsAnsibleNode'
